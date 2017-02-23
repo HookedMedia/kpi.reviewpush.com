@@ -1,11 +1,15 @@
-import { get } from 'lodash';
+import { get, last } from 'lodash';
 import moment from 'moment';
 import twemoji from 'twemoji';
 
-export default class {
+class Tweet {
 
     constructor(tweetProperties) {
         this.tweetProperties = tweetProperties;
+
+        if (this.hasQuote) {
+            this.quotedTweet = new Tweet(this.tweetProperties.quoted_status);
+        }
     }
 
     get authorScreenName() {
@@ -28,6 +32,18 @@ export default class {
         return moment(this.tweetProperties['created_at'], 'dd MMM DD HH:mm:ss ZZ YYYY');
     }
 
+    get isRetweet() {
+        return this.tweetProperties.hasOwnProperty('retweeted_status');
+    }
+
+    get hasQuote() {
+        return this.tweetProperties['is_quote_status'];
+    }
+
+    get quote() {
+        return this.quotedTweet || null;
+    }
+
     get text() {
         let text = this.tweetProperties['text'];
 
@@ -38,6 +54,10 @@ export default class {
         text = get(this.tweetProperties, 'extended_entities.media', [])
             .map(media => media.url)
             .reduce((text, mediaUrl) => text.replace(mediaUrl, ''), text);
+
+        if (this.hasQuote) {
+            text = text.replace(last(this.tweetProperties.entities.urls).url, '');
+        }
 
         return text;
     }
@@ -69,3 +89,5 @@ export default class {
         return 'small';
     }
 }
+
+export default Tweet;

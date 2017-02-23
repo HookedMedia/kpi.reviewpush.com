@@ -1,14 +1,15 @@
 <template>
-    <grid :position="grid" modifiers="padded transparent">
+    <grid :position="grid" modifiers="padded">
         <section :class="addClassModifiers('rain-forecast', status)">
-            <h1 class="rain-forecast__title rain-forecast__title--rainy" v-if="status == 'rainy'">30' FORECAST</h1>
-            <h1 class="rain-forecast__title rain-forecast__title--rainy" v-if="status == 'wet'">STAY INSIDE</h1>
+            <h1 class="rain-forecast__title" v-if="status === 'rainy'">30' Forecast</h1>
+            <h1 class="rain-forecast__title" v-if="status === 'wet'">Stay inside</h1>
+            <h1 class="rain-forecast__title" v-if="status === 'dry'">Bikers stay dry</h1>
             <div class="rain-forecast__background"></div>
-            <div class="rain-forecast__graph" >
+            <div v-if="status !== 'dry'" class="rain-forecast__graph" >
                 <graph
                   :labels="graphLabels"
                   :values="graphData"
-                  line-color="rgba(19,134,158, .5)"
+                  line-color="rgba(19,134,158, .75)"
                   background-color="rgba(19,134,158, .25)"
                 ></graph>
             </div>
@@ -36,6 +37,7 @@ export default {
 
     computed: {
         status() {
+
             if (this.noRainPredicted === true) {
                 return 'dry';
             }

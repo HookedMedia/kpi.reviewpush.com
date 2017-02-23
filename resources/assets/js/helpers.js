@@ -1,5 +1,6 @@
 import { upperFirst } from 'lodash';
 import moment from 'moment';
+import duration from 'moment-duration-format';
 
 export function formatNumber(value) {
     if (! value) {
@@ -19,15 +20,23 @@ export function addClassModifiers(base, modifiers = []) {
     return [base, ...modifiers];
 }
 
+export function formatDuration(start) {
+    return moment.duration(moment().diff(start), 'milliseconds').format("d[d] h[h] m[m]");
+}
+
 export function relativeDate(value) {
     const date = moment(value);
 
     if (moment().isSame(date, 'd')) {
-        return "Today";
+        return 'Today';
     }
 
     if (moment().add(1, 'day').isSame(date, 'd')) {
-        return "Tomorrow";
+        return 'Tomorrow';
+    }
+
+    if (date.isBetween(moment().add(1, 'day'), moment().add(8, 'days'), 'day')) {
+        return date.format('dddd');
     }
 
     return 'In ' + date.toNow(true);
@@ -49,7 +58,7 @@ export function relativeDateTime(value) {
     }
 
     if (moment().diff(date, 'hours') >= 24) {
-        return "A day ago"
+        return 'A day ago';
     }
 
     if (moment().diff(date, 'hours') > 1) {
@@ -72,5 +81,5 @@ export function relativeDateTime(value) {
 }
 
 export function diffInSeconds(otherMoment) {
-    return moment().diff(otherMoment, 'seconds')
+    return moment().diff(otherMoment, 'seconds');
 }

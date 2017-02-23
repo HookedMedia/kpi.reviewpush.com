@@ -4,8 +4,8 @@
     z-index: 1;
 }
 
-.last-fm__empty {
-    @include background-icon('/svg/music.svg');
+.last-fm__icon {
+    @include background-icon('../svg/music.svg');
 }
 
 .last-fm__background {
@@ -21,7 +21,6 @@
     opacity: .3;
 
     filter: blur(25px);
-    mix-blend-mode: lighten;
 
     @at-root {
         @keyframes ken-burns {
@@ -58,6 +57,7 @@
     margin: setting($grid, cell-padding);
     padding-bottom: 25%;
 
+    background-color: rgba($white, .1);
     background-position: center;
     background-size: cover;
     border-radius: .25vw;
@@ -94,7 +94,7 @@
     white-space: nowrap;
 
     &:before {
-        @include icon('/svg/music.svg');
+        @include icon('../svg/music.svg');
 
         margin-right: .25em;
     }
